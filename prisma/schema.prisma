@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Location {
+  id Int @default(autoincrement()) @id
+  parrish_id String @unique
+  parrish Parrish @relation(fields: [parrish_id], references: [id])
+  description String
+  shapetype String
+  shape Json
+  filled_form FilledForm[]
+}
+
+model Municipality {
+    id String @id
+    name String
+    short_name String
+    parrish Parrish[]
+}
+
+model Parrish {
+  id String @id
+  municipality_id String
+  municipality Municipality @relation(fields: [municipality_id], references: [id])
+  location Location?
+  name String
+  code String
+}
+
+model Form {
+  id Int @default(autoincrement()) @id
+  category_id String
+  category Category @relation(fields: [category_id], references: [id])
+  inputs Json[]
+  title String
+  tag String
+}
+
+model FilledForm {
+  id Int @default(autoincrement()) @id
+  form_id Int
+  location_id Int
+  location Location @relation(fields: [location_id], references: [id])
+  values Json
+  title String
+  created_at DateTime @default(now()) @updatedAt
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model Category {
+  id String @id
+  name String
+  icon String
+  color String
+  form Form[]
+  parent_id String
+  element_type String
+}
+
+
