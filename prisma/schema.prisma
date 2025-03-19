@@ -20,8 +20,8 @@ model Location {
   parrish Parrish @relation(fields: [parrish_id], references: [id])
   description String
   shapetype String
+  categories Category[]
   shape Json
-  filled_form FilledForm[]
 }
 
 model Municipality {
@@ -46,14 +46,14 @@ model Form {
   category Category @relation(fields: [category_id], references: [id])
   inputs Json[]
   title String
+  filled_form FilledForm[]
   tag String
 }
 
 model FilledForm {
   id Int @default(autoincrement()) @id
   form_id Int
-  location_id Int
-  location Location @relation(fields: [location_id], references: [id])
+  form Form @relation(fields: [form_id], references: [id])
   values Json
   title String
   created_at DateTime @default(now()) @updatedAt
@@ -66,6 +66,7 @@ model Category {
   icon String
   color String
   form Form[]
+  locations Location[]
   parent_id String
   element_type String
 }
