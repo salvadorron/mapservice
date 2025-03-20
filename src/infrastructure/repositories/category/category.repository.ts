@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
+import CategoryFilters from "src/domain/filters/category.filters";
 import CategoryRepository from "src/domain/repository/category/category.repository";
 import { PrismaService } from "src/infrastructure/services/prisma.service";
 
@@ -24,8 +25,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
         return this.prisma.category.findUnique({ where: { id } });
     }
 
-    async getCategories(): Promise<Prisma.CategoryGetPayload<null>[]> {
-        return this.prisma.category.findMany();
+    async getCategories(filters?: CategoryFilters): Promise<Prisma.CategoryGetPayload<null>[]> {
+        return this.prisma.category.findMany({ where: { ...filters } });
     }
 
 }

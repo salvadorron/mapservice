@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
+import CategoryFilters from "src/domain/filters/category.filters";
 import CategoryRepositoryImpl from "src/infrastructure/repositories/category/category.repository";
 
 @Injectable()
 class CategoryService {
     constructor(private readonly categoryRepository: CategoryRepositoryImpl) {}
 
-    async getCategories() {
-        return this.categoryRepository.getCategories();
+    async getCategories(filters?: CategoryFilters) {
+        return this.categoryRepository.getCategories(filters);
     }
 
     async getCategoryById(id: string) {

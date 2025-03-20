@@ -1,14 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import CategoryService from '../services/category.service';
 import { Prisma } from '@prisma/client';
+import CategoryFilters from 'src/domain/filters/category.filters';
 
 @Controller("category")
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  getCategories() {
-    return this.categoryService.getCategories();
+  getCategories(
+    @Query() categoryFilters?: CategoryFilters
+  ) {
+    return this.categoryService.getCategories(categoryFilters);
   }
 
   @Get(':id')
